@@ -9,7 +9,9 @@ rutaEmpresas = "empresas.txt"
 rutaTransportes = "transportes.txt"
 root = tk.Tk()
 #######################################
+
 def menuPrincipal():#Función para la cración de la ventana para el menú principal
+    global root
     root.destroy
     root.geometry("700x500")
     root.title("Menú principal")
@@ -21,10 +23,45 @@ def menuPrincipal():#Función para la cración de la ventana para el menú princ
 
 
 
-    botonMP1= tk.Button(root, text="Opciones administrativas", width=25, font=("Arial",12), bg="peachpuff",fg="black", command=opcionesAdmin).place(x=250,y=110)
+    botonMP1= tk.Button(root, text="Opciones administrativas", width=25, font=("Arial",12), bg="peachpuff",fg="black", command=ventanaClave).place(x=250,y=110)
     botonMP2= tk.Button(root, text="opciones generales", width=25,font=("Arial",12), bg="peachpuff",fg="black", command=opcionesUsuario).place(x=250,y=170)
     botonMP3= tk.Button(root, text="Salir",width=25, font=("Arial",12), bg="peachpuff",fg="black", command=Salir).place(x=250,y=230)
 ############################################################################################
+
+
+def ventanaClave():
+    global root
+    root.destroy()
+    root = tk.Tk()
+    root.geometry("700x400")
+    root.title("accesando a opciones administrativas")
+    root.config(bg=("white"))
+    root.resizable(False,False)
+
+    tk.Label(root, text="        Ingresando a opciones administrativas      ", font=("arial", 15),bg="peachpuff" , fg="Black").pack(fill=tk.X)
+    
+
+
+    labelClave = tk.Label(root, bg="white",text="Ingrese la clave de acceso:",font=("arial",15)).place(x=25, y=100)
+    clave = tk.StringVar()
+    claveEntry=tk.Entry(root,textvariable=clave,width=50).place(x=210, y=150)
+
+    botonIngresando =  tk.Button(root, text="ingresar", font=("Arial",12), bg="peachpuff",fg="black", command=lambda:VerificarClave(clave.get())).place(x=200,y=290)                             
+    botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=menuPrincipal).place(x=500,y=290)
+
+
+    root.mainloop
+
+def VerificarClave(clave):
+    with open ("clave.txt", "r") as archivo:
+        texto = archivo.readlines()
+    if texto[0] == clave:
+        return opcionesAdmin()
+    else:
+        tk.messagebox.showerror("Clave incorrecta", "La clave ingresada es incorrecta")
+            
+
+#############################################################################################
 def opcionesAdmin():
     global root
     root.destroy()
@@ -393,10 +430,39 @@ def VentanaAgregarViaje():
 
 
     botonGuardaT = (tk.Button(root, text="Agregar transporte", font=("Arial",12), bg="peachpuff",fg="black",
-                              command=lambda:agregarTransporte(PaisSal.get(),fechaSal.get(),PaisLLe.get(),fechaLLe.get(),empresaYtransporte.get(),MontEco.get(),MontNor.get(),MontVip)).place(x=300,y=320))
+                              command=lambda:guardarViaje(PaisSal.get(),fechaSal.get(),PaisLLe.get(),fechaLLe.get(),empresaYtransporte.get(),MontEco.get(),MontNor.get(),MontVip)).place(x=300,y=320))
                              
-    botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=gestionEmpresas).place(x=500,y=320)
+    botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=gestionViaje).place(x=500,y=320)
 #########################################################################
+def guardarViaje(PaisSal,fechaSal,PaisLLe,fechaLLe,empresaYtransporte,MontEco,MontNor,MontVip):
+    try:
+        if PaisSal !="" and fechaSal != "" and PaisLLe != "" and fechaLLe != "" and empresaYtransporte !="" and MontEco != "" and MontNor !="" and MontVip !="":
+                    archivo = open(rutaTransportes,"a")
+                    archivo.write(str(PaisSal))
+                    archivo.write(",")
+                    archivo.write(str(fechaSal))
+                    archivo.write(",")
+                    archivo.write(str(PaisLLe))
+                    archivo.write(",")
+                    archivo.write(str(fechaLLe))
+                    archivo.write(",")
+                    archivo.write(str(empresaYtransporte))
+                    archivo.write("\n")
+                    archivo.write(str(MontEco))
+                    archivo.write("\n")
+                    archivo.write(str(MontNor))
+                    archivo.write("\n")
+                    archivo.write(str(MontVip))
+                    archivo.write("\n")
+                    archivo.close
+                    tk.messagebox.showinfo("Viaje agregado", ("El viaje numero"+" " +numero+" " "ha sido agregada con exito"))
+        
+        else:
+            tk.messagebox.showerror("Error en los datos", "No deben de haber viajes repetidos")
+            
+    except ValueError:
+        tk.messagebox.showerror("Error en los datos", "Ingrese los datos de forma correcta")
+    
 def VentanaEliminarViaje():
     pass
 
