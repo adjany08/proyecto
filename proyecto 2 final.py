@@ -4,11 +4,35 @@ import os
 import sys
 from tkinter import filedialog
 from tkinter import messagebox
+import datetime
 #######################################
 rutaEmpresas = "empresas.txt"
 rutaTransportes = "transportes.txt"
+rutaViaje = "viajes.txt"
 root = tk.Tk()
-#######################################
+############################################3
+
+
+
+
+def volverPrin():
+    global root
+    root.destroy()
+    root = tk.Tk()
+    root.geometry("500x500")
+    menuPrincipal()
+    
+def existe(lista,elemento): 
+    while lista != []: 
+        if lista[0] == elemento: 
+            return True  
+        else: 
+            lista = lista[1:] 
+    return False 
+
+
+
+##############################################
 
 def menuPrincipal():#Función para la cración de la ventana para el menú principal
     global root
@@ -46,8 +70,8 @@ def ventanaClave():
     clave = tk.StringVar()
     claveEntry=tk.Entry(root,textvariable=clave,width=50).place(x=210, y=150)
 
-    botonIngresando =  tk.Button(root, text="ingresar", font=("Arial",12), bg="peachpuff",fg="black", command=lambda:VerificarClave(clave.get())).place(x=200,y=290)                             
-    botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=menuPrincipal).place(x=500,y=290)
+    botonIngresando =  tk.Button(root, text="ingresar", font=("Arial",12), bg="peachpuff",fg="black", command=lambda:VerificarClave(clave.get())).place(x=400,y=290)                             
+    botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=volverPrin).place(x=500,y=290)
 
 
     root.mainloop
@@ -79,7 +103,7 @@ def opcionesAdmin():
     botonOA3= tk.Button(root, text="Gestión de viaje",width=28, font=("Arial",12), bg="peachpuff",fg="black", command=gestionViaje).place(x=225,y=230)
     botonOA4= tk.Button(root, text="Consultar historial de reservaciones", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=historialReservaciones).place(x=225,y=290)
     botonOA5= tk.Button(root, text="Estadísticas de viaje", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=estadisticas).place(x=225,y=350)
-    botonOA6= tk.Button(root, text="Volver", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=menuPrincipal).place(x=225,y=350)
+    botonOA6= tk.Button(root, text="Volver", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=volverPrin).place(x=225,y=350)
 ########################################################################################################
 def gestionEmpresas():
     global root
@@ -96,7 +120,7 @@ def gestionEmpresas():
     botonGE1= tk.Button(root, text="Agregar empresa", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=VentanaAgregarEmpresas).place(x=250,y=110)
     botonGE2= tk.Button(root, text="Eliminar empresa", width=28,font=("Arial",12), bg="peachpuff",fg="black", command=VentanaEliminarEmpresas).place(x=250,y=170)
     botonGE3= tk.Button(root, text="Modificar empresa",width=28, font=("Arial",12), bg="peachpuff",fg="black", command=modificarEmpresa).place(x=250,y=230)
-    botonGE4= tk.Button(root, text="Mostrar empresas", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=mostrarEmpresas).place(x=250,y=290)
+    botonGE4= tk.Button(root, text="Mostrar empresas", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=crearVentanaMostrarEmpresas).place(x=250,y=290)
     botonGE5= tk.Button(root, text="Volver", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=opcionesAdmin).place(x=250,y=350)
 ########################################################################################################    
 def VentanaAgregarEmpresas():
@@ -140,39 +164,57 @@ def VentanaAgregarEmpresas():
     
     root.mainloop
     
-    
+def existeEmpresa(lista, cedula):#Función que ve si empresa ya existe
+    if lista != []:
+        empresa = lista[0]
+        if empresa[0].lower() == cedula.lower():
+            return True
+        else:
+            return existeEmpresa(lista[1:], cedula)
+    else:
+        return 0    
+
+
+
 
 def guardarEmpresa(cedula, nombre, direccion,provincia):
     try:
-        if largo(int(cedula)) == 10 and cedula!=int:
-            if cedula !="" and nombre != "" and direccion != "" and provincia != "" :
-                archivo = open(rutaEmpresas,"a")
-                archivo.write(str(cedula))
-                archivo.write(",")
-                archivo.write(str(nombre))
-                archivo.write(",")
-                archivo.write(str(direccion))
-                archivo.write(",")
-                archivo.write(str(provincia))
-                archivo.write("\n")
-                archivo.close
-                tk.messagebox.showinfo("Empresa agregada", ("La empresa"+" " +nombre+" " "ha sido agregada con exito"))
-            else:
-                tk.messagebox.showerror("Error en los datos", "No deben de haber espacios vacios")
-            
+        contenido = retornaContenidoArchivo(rutaEmpresas)
+        if existeEmpresa(contenido,cedula) == True:
+            tk.messagebox.showerror("Error ", "Ya existe una emprea registrada con esa cédula ")
         else:
-            tk.messagebox.showerror("Error en la cédula", "La cédula debe tener 10 digitos")
+            if largo(int(cedula)) == 10 and cedula!=int:
+                if cedula !="" and nombre != "" and direccion != "" and provincia != "" :
+                    archivo = open(rutaEmpresas,"a")
+                    archivo.write(str(cedula))
+                    archivo.write(",")
+                    archivo.write(str(nombre))
+                    archivo.write(",")
+                    archivo.write(str(direccion))
+                    archivo.write(",")
+                    archivo.write(str(provincia))
+                    archivo.write("\n")
+                    archivo.close
+                    tk.messagebox.showinfo("Empresa agregada", ("La empresa"+" " +nombre+" " "ha sido agregada con exito"))
+                else:
+                    tk.messagebox.showerror("Error en los datos", "No deben de haber espacios vacios")
+            else:
+                tk.messagebox.showerror("Error ", "La cédula debe tener 10 digitos numericos ")
     except ValueError:
-        tk.messagebox.showerror("Error en la cédula", "La cédula debe tener 10 digitos numericos")
-
-        
+        tk.messagebox.showerror("Error en la cédula", "La cédula debe tener 10 digitos numericos")        
 
 def largo(num):
     cont = 0
     while num>0:
         cont += 1
         num = num//10
-    return cont     
+    return cont
+
+def largoL(lista):
+    cont=0
+    for i in lista:
+        cont +=1
+    return cont    
 
 
 ##########################################################################################################################################
@@ -194,38 +236,78 @@ def VentanaEliminarEmpresas():
 
 
     labelCedula = tk.Label(root, bg="white",text="Ingrese la cédula jurídica de la empresa a eliminar:",font=("arial",15)).place(x=25, y=100)
-    cedula = tk.StringVar()
-    cedulaEntry=tk.Entry(root,textvariable=cedula,width=50).place(x=210, y=150)
+    cedula1 = tk.StringVar()
+    cedulaEntry=tk.Entry(root,textvariable=cedula1,width=50).place(x=210, y=150)
 
-    botonEliminarE = tk.Button(root, text="Eliminar empresa", font=("Arial",12), bg="peachpuff",fg="black",command=lambda:eliminarEmpresa(cedula.get()).place(x=300,y=290))
-                             
-    botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=opcionesAdmin).place(x=500,y=290)
+                     
+    botonEliminar =  tk.Button(root, text="Eliminar", font=("Arial",12), bg="peachpuff",fg="black", command=lambda:eliminarEmpresa(cedula1.get())).place(x=300,y=290)                             
+
+    botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=gestionEmpresas).place(x=500,y=290)
 
 
     root.mainloop
 
+
+
+
+
+def retornaContenidoArchivo(rutaEmpresas): #Función que retorna contenido de empresa
+    with open(rutaEmpresas, "r") as archivo:
+        todoTexto=archivo.read()
+    convertirTextoALista = todoTexto.split("\n")
+    return convierteALista(convertirTextoALista)
+
+
+
+def convierteALista(lista):
+    if lista == []:
+        return []
+    elif lista[0] != "":
+        return [lista[0].split(",")] + convierteALista(lista[1:])
+    else:
+        return convierteALista(lista[1:])
+
+
+
+def guardarItems(lista):
+    with open (rutaEmpresas, "w") as archivo:
+        while lista !=[]:
+            linea = ",".join(lista[0])+"\n"
+            archivo.write(linea)
+            lista = lista[1:]
     
-def eliminarEmpresa():
-    pass
+def eliminarEmpresa(cedula):
+    empresas = retornaContenidoArchivo(rutaEmpresas)
+    nuevaL = []
+    elimina = False
+    for empre in empresas:
+        if cedula != empre[0]:
+            nuevaL += [empre]
+        else:
+            elimina = True
+    if(elimina):
+        guardarItems(nuevaL)
+        tk.messagebox.showinfo("Empresa eliminada", ("La empresa cedula: " +cedula+ " ha sido elminada con exito"))
+    else:
+        tk.messagebox.showerror("Error en la cedula", "La empresa: "+cedula+" no existe")
 
 #########################################################################################################################    
-def ventanaMostrarEmpresas():
+def crearVentanaMostrarEmpresas():
 
     ventanaMostrar = tk.Toplevel(root)
+    ventanaMostrar.title("Empresas")
+    ventanaMostrar.resizable(False,False)
     frame = tk.Frame(master=ventanaMostrar, width=800, height=800, bg="white")
 
-    botonCerrar = tk.Button(frame, tex="Cerrar", command=lambda:cerrarVentanaMostrar(ventanaMostrar))
-    botonCerrar.grid(row=0, column=0)
 
-    labelMensajeLista = tk.Label(frame,text="Lista de empresas", bg="peachpuff")
+    labelMensajeLista = tk.Label(frame,text="Lista de empresas",font= ("arial",20), bg="peachpuff")
     labelMensajeLista.grid(row=1, column=0)
 
     mostrarEmpresas(frame, 3)
 
-    frame.pack
+    frame.pack()
     
-def cerrarVentnaMostrar(ventanaMostrar):
-    ventanaMostrar.destroy()
+
 
 def mostrarEmpresas(frameParam,contadorGrid):
     archivo= open(rutaEmpresas, "r")
@@ -235,9 +317,9 @@ def mostrarEmpresas(frameParam,contadorGrid):
     for linea in lineas:
         partes = linea.split(",")
         listaRetorno += [partes]
-        if largo(partes) == 4:
+        if largoL(partes) == 4:
             texto = "Cedula: "+partes[0]+"Empresa: "+partes[1]+"Ubicacion: "+partes[2]+"Provincia: "+partes[3]
-            labelMensajeTemp=tk.label(frameParam, text=texto, bg="white", fg="black")
+            labelMensajeTemp=tk.Label(frameParam, text=texto, bg="white", fg="black")
             labelMensajeTemp.grid(row=contadorGrid, column=0)
             contadorGrid += 1
 ######################################################################################################################
@@ -254,11 +336,16 @@ def gestionTransportes():
     tk.Label(root, text="         Gestión de transportes      ", font=("arial", 15),bg="peachpuff" , fg="Black").pack(fill=tk.X)
     tk.Label(root, text="Seleccione una opción" , font=("arial",15),bg="white",fg="gray10").place(x=250,y=40)
 
-    botonGT1= tk.Button(root, text="Agregar transporte", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=VentanaAgregarTransporte).place(x=250,y=110)
-    botonGT2= tk.Button(root, text="Eliminar transporte", width=28,font=("Arial",12), bg="peachpuff",fg="black", command=VentanaEliminarTransporte).place(x=250,y=170)
-    botonGT3= tk.Button(root, text="Modificar transporte",width=28, font=("Arial",12), bg="peachpuff",fg="black", command=VentanamodificarTransporte).place(x=250,y=230)
-    botonGT4= tk.Button(root, text="Mostrar transporte", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=mostrarTransporte).place(x=250,y=290)
-    botonGT5= tk.Button(root, text="Volver", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=opcionesAdmin).place(x=250,y=350)
+    botonGT1= (tk.Button(root, text="Agregar transporte", width=28, font=("Arial",12),
+                         bg="peachpuff",fg="black", command=VentanaAgregarTransporte).place(x=250,y=110))
+    botonGT2= (tk.Button(root, text="Eliminar transporte", width=28,font=("Arial",12),
+                         bg="peachpuff",fg="black", command=VentanaEliminarTransporte).place(x=250,y=170))
+    botonGT3= (tk.Button(root, text="Modificar transporte",width=28, font=("Arial",12),
+                         bg="peachpuff",fg="black", command=VentanamodificarTransporte).place(x=250,y=230))
+    botonGT4= (tk.Button(root, text="Mostrar transporte", width=28, font=("Arial",12),
+                         bg="peachpuff",fg="black", command=crearVentanaMostrarTransporte).place(x=250,y=290))
+    botonGT5= (tk.Button(root, text="Volver", width=28, font=("Arial",12),
+                         bg="peachpuff",fg="black", command=gestionTransportes).place(x=250,y=350))
 
 def VentanaAgregarTransporte():
     global root
@@ -312,53 +399,122 @@ def VentanaAgregarTransporte():
     botonGuardaT = (tk.Button(root, text="Agregar transporte", font=("Arial",12), bg="peachpuff",fg="black",
                               command=lambda:agregarTransporte(placa.get(),marca.get(),modelo.get(),anno.get(),cantEco.get(),cantNor.get(),cantVip.get())).place(x=300,y=320))
                              
-    botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=gestionEmpresas).place(x=500,y=320)
+    botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=gestionTransportes).place(x=500,y=320)
 
     
     root.mainloop
 ##################################################################################################################################
 
 def agregarTransporte(placa, marca,modelo,anno,cantEco,cantNor,cantVip):
-    try:
-        retorno = verificarArchivos(rutaEmpresas)
-        contenido = retornaContenidoArchivo(rutaEmpresas)
-        existeEmpre = existeEmpresa(contenido, cedula)
-        if existeEmpre == True:  
-            if placa !="" and marca != "" and modelo != "" and anno != "" and cantEco !="" and cantNor != "" and cantVip !="":
-                archivo = open(rutaTransportes,"a")
-                archivo.write(str(placa))
-                archivo.write(",")
-                archivo.write(str(marca))
-                archivo.write(",")
-                archivo.write(str(modelo))
-                archivo.write(",")
-                archivo.write(str(anno))
-                archivo.write("\n")
-                archivo.write(str(cantEco))
-                archivo.write("\n")
-                archivo.write(str(cantNor))
-                archivo.write("\n")
-                archivo.write(str(cantVip))
-                archivo.write("\n")
-                archivo.close
-                tk.messagebox.showinfo("Transporte agregado", ("El transporte placa"+" " +placa+" " "ha sido agregada con exito"))
-            else:
-                tk.messagebox.showerror("Error en los datos", "No deben de haber espacios vacios")
+    try:  
+        if placa !="" and marca != "" and modelo != "" and anno != "" and cantEco !="" and cantNor != "" and cantVip !="":
+            archivo = open(rutaTransportes,"a")
+            archivo.write(str(placa))
+            archivo.write(",")
+            archivo.write(str(marca))
+            archivo.write(",")
+            archivo.write(str(modelo))
+            archivo.write(",")
+            archivo.write(str(anno))
+            archivo.write(",")
+            archivo.write(str(cantEco))
+            archivo.write(",")
+            archivo.write(str(cantNor))
+            archivo.write(",")
+            archivo.write(str(cantVip))
+            archivo.write("\n")
+            archivo.close
+            tk.messagebox.showinfo("Transporte agregado", ("El transporte placa "+placa+ " ha sido agregada con exito"))
         else:
-            tk.messagebox.showerror("Error en los datos", "No deben de haber empresas repetidas")
+            tk.messagebox.showerror("Error en los datos", "No deben de haber espacios vacios")
             
     except ValueError:
         tk.messagebox.showerror("Error en los datos", "Ingrese los datos de forma correcta")
         
+            
 
 def VentanaEliminarTransporte():
-    pass
+    global root
+    root.destroy
+    root.destroy()
+    root = tk.Tk()
+    root.geometry("700x400")
+    root.title("Eliminando transporte")
+    root.config(bg=("white"))
+    root.resizable(False,False)
+
+    tk.Label(root, text="        Eliminando transporte      ", font=("arial", 15),bg="peachpuff" , fg="Black").pack(fill=tk.X)
+    tk.Label(root, text="Ingrese la informacion del transporte a eliminar" , font=("arial",15),bg="white",fg="gray10").place(x=150,y=40)
+
+
+
+
+    labelCedula = tk.Label(root, bg="white",text="Ingrese la placa del transporte a eliminar:",font=("arial",15)).place(x=25, y=100)
+    placa1 = tk.StringVar()
+    placaEntry=tk.Entry(root,textvariable=placa1,width=50).place(x=210, y=150)
+
+                     
+    botonEliminar =  tk.Button(root, text="Eliminar", font=("Arial",12), bg="peachpuff",fg="black", command=lambda:eliminarTransporte(placa1.get())).place(x=300,y=290)                             
+
+    botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=gestionTransportes).place(x=500,y=290)
+
+
+    root.mainloop
+
+def guardarItems(lista):
+    with open (rutaTransportes, "w") as archivo:
+        while lista !=[]:
+            linea = ",".join(lista[0])+"\n"
+            archivo.write(linea)
+            lista = lista[1:]
+    
+def eliminarTransporte(placa):
+    transportes = retornaContenidoArchivo(rutaTransportes)
+    nuevaLT = []
+    elimina = False
+    for tran in transportes:
+        if placa != tran[0]:
+            nuevaLT += [tran]
+        else:
+            elimina = True
+    if(elimina):
+        guardarItems(nuevaLT)
+        tk.messagebox.showinfo("Transporte eliminado", ("El transporte placa: " +placa+ " ha sido elminado con exito"))
+    else:
+        tk.messagebox.showerror("Error en la placa", "El transporte: "+placa+" no existe")    
 
 def VentanamodificarTransporte():
     pass
 
-def mostrarTransporte():
-    pass
+def crearVentanaMostrarTransporte():
+
+    ventanaMostrarT = tk.Toplevel(root)
+    ventanaMostrarT.title("Transportes")
+    ventanaMostrarT.resizable(False,False)
+    frame = tk.Frame(master=ventanaMostrarT, width=800, height=800, bg="white")
+
+
+    labelMensajeLista = tk.Label(frame,text="Lista de transportes",font=("arial",20), bg="peachpuff")
+    labelMensajeLista.grid(row=1, column=0)
+
+    mostrarTransportes(frame, 5)
+
+    frame.pack()
+
+def mostrarTransportes(frameParam,contadorGrid):
+    archivo= open(rutaTransportes, "r")
+    contenido = archivo.read()
+    lineas = contenido.split("\n")
+    listaRetorno=[]
+    for linea in lineas:
+        partes = linea.split(",")
+        listaRetorno += [partes]
+        if largoL(partes) == 7:
+            texto = ("Placa: "+partes[0]+" Marca: "+partes[1]+" Modelo: "+partes[2]+" Año: "+partes[3]+" Cantidad asientos clase económica: "+partes[4]+
+                     " Cantidad asientos clase normal: "+partes[5]+" Cantidad asientos clase vip: "+partes[6])
+            labelMensajeTemp=tk.Label(frameParam, text=texto, bg="white", fg="black")
+            labelMensajeTemp.grid(row=contadorGrid, column=0)
+            contadorGrid += 1
 ######################################################################################################################################
 
 def gestionViaje():
@@ -447,18 +603,18 @@ def guardarViaje(PaisSal,fechaSal,PaisLLe,fechaLLe,empresaYtransporte,MontEco,Mo
                     archivo.write(str(fechaLLe))
                     archivo.write(",")
                     archivo.write(str(empresaYtransporte))
-                    archivo.write("\n")
+                    archivo.write(",")
                     archivo.write(str(MontEco))
-                    archivo.write("\n")
+                    archivo.write(",")
                     archivo.write(str(MontNor))
-                    archivo.write("\n")
+                    archivo.write(",")
                     archivo.write(str(MontVip))
-                    archivo.write("\n")
+                    archivo.write(",")
                     archivo.close
-                    tk.messagebox.showinfo("Viaje agregado", ("El viaje numero"+" " +numero+" " "ha sido agregada con exito"))
+                    tk.messagebox.showinfo("Viaje agregado", ("El viaje numero"+ +numero+  "ha sido agregada con exito"))
         
         else:
-            tk.messagebox.showerror("Error en los datos", "No deben de haber viajes repetidos")
+            tk.messagebox.showerror("Error en los datos", "No deben de haber espacios vacios")
             
     except ValueError:
         tk.messagebox.showerror("Error en los datos", "Ingrese los datos de forma correcta")
@@ -498,8 +654,6 @@ def Salir():
     global root
     root.destroy()
     sys.exit()
-#############################################################################
-
 
 menuPrincipal()    
 
