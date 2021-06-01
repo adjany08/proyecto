@@ -10,7 +10,12 @@ rutaTransportes = "transportes.txt"
 rutaViajes = "viajes.txt"
 root = tk.Tk()
 ############################################3
-
+"""
+E:No aplica
+S:Destruccion de la ventana en que se encuentre 
+R:No aplica
+O:Volver al menú principal
+"""
 def volverPrin():
     global root
     root.destroy()
@@ -19,7 +24,12 @@ def volverPrin():
     menuPrincipal()
 
 ##############################################
-
+"""
+E:No aplica
+S:Una ventana 
+R:No aplica
+O:Mostrar 3 botones que redirigen a una funcion al usuario
+"""
 def menuPrincipal():#Función para la cración de la ventana para el menú principal
     global root
     root.destroy
@@ -37,8 +47,12 @@ def menuPrincipal():#Función para la cración de la ventana para el menú princ
     botonMP2= tk.Button(root, text="Opciones de usuario normal", width=25,font=("Arial",12), bg="peachpuff",fg="black", command=opcionesUsuario).place(x=250,y=170)
     botonMP3= tk.Button(root, text="Salir",width=25, font=("Arial",12), bg="peachpuff",fg="black", command=Salir).place(x=250,y=230)
 ############################################################################################
-
-
+"""
+E:No aplica
+S:Una ventana para la verficicacion de la clave
+R:No aplica
+O:Hacer el display para el ingreso de la clave y crear espacio de texto para ingresarla
+"""
 def ventanaClave():
     global root
     root.destroy()
@@ -61,7 +75,12 @@ def ventanaClave():
 
 
     root.mainloop
-
+"""
+E:Una clave
+S:Acceso al menu administrativo si la clave es correcta
+R:no aplica
+O:Verificar la clave
+"""
 def VerificarClave(clave):
     with open ("clave.txt", "r") as archivo:
         texto = archivo.readlines()
@@ -72,6 +91,12 @@ def VerificarClave(clave):
             
 
 #############################################################################################
+"""
+E:No aplica
+S:ventana de opciones administrativas
+R:No aplica
+O:creacion de la ventana de opcines administrativas y 6 botones
+"""
 def opcionesAdmin():
     global root
     root.destroy()
@@ -94,7 +119,13 @@ def opcionesAdmin():
 """
 Gestion de empresas
 """
-########################################################################################################    
+########################################################################################################
+"""
+E:No aplica
+S:creacion de la ventana para la gestion de empresas
+R:No aplica
+O:Mostrarle al usuario las diferentes opciones para la gestion de empresas y crear botones para redirigir a estas
+"""
 def gestionEmpresas():
     global root
     root.destroy()
@@ -112,7 +143,13 @@ def gestionEmpresas():
     botonGE3= tk.Button(root, text="Modificar empresa",width=28, font=("Arial",12), bg="peachpuff",fg="black", command=VentanaModificarEmpresa).place(x=250,y=230)
     botonGE4= tk.Button(root, text="Mostrar empresas", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=crearVentanaMostrarEmpresas).place(x=250,y=290)
     botonGE5= tk.Button(root, text="Volver", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=opcionesAdmin).place(x=250,y=350)
-########################################################################################################    
+########################################################################################################
+"""
+E:No aplica
+S:Creacion de la ventana para agregar empresas
+R:No aplica
+O:Capturar la informacion de las empresas a agregar 
+"""
 def VentanaAgregarEmpresas():
     global root
     root.destroy()
@@ -154,6 +191,12 @@ def VentanaAgregarEmpresas():
     
     root.mainloop
     
+"""
+E:una lista y una cedula
+S:True si la empresa existe
+R:No aplica
+O:Verificar si una empresa existe//verificar si existe un elemento en una lista
+"""    
 def existeEmpresa(lista, cedula):#Función que ve si empresa ya existe
     if lista != []:
         empresa = lista[0]
@@ -163,7 +206,12 @@ def existeEmpresa(lista, cedula):#Función que ve si empresa ya existe
             return existeEmpresa(lista[1:], cedula)
     else:
         return 0    
-
+"""
+E:Una cedula, nombre, direccion y provincia
+S:Guardar la informacion de la entrada en un archivo 
+R:No pueden haber elementos vacios
+O:Guardar los datos de la empresa modificada
+"""
 def guardarEmpresaMOD(cedula, nombre, direccion,provincia):
     if cedula !="" and nombre != "" and direccion != "" and provincia != "" :
                 archivo = open(rutaEmpresas,"a")
@@ -177,8 +225,17 @@ def guardarEmpresaMOD(cedula, nombre, direccion,provincia):
                 archivo.write("\n")
                 archivo.close
                 tk.messagebox.showinfo("Empresa modificada", ("La empresa " +nombre+" ha sido modificada con exito"))
+                
+    else:
+        tk.messagebox.showerror("Error en los datos", "No deben de haber espacios vacios")
+       
 
-             
+"""
+E:Una cedula, nombre, direccion y provincia
+S:Que los datos ingresados sean guardados en un archivo txt
+R:No debe de existir una empresa con la misma cedula y los espacios no pueden estar vacios
+O:Guardar la informacion de la empresa
+"""             
 def guardarEmpresa(cedula, nombre, direccion,provincia):
     try:
         contenido = retornaContenidoArchivo(rutaEmpresas)
@@ -204,23 +261,40 @@ def guardarEmpresa(cedula, nombre, direccion,provincia):
                 tk.messagebox.showerror("Error ", "La cédula debe tener 10 digitos numericos ")
     except ValueError:
         tk.messagebox.showerror("Error en la cédula", "La cédula debe tener 10 digitos numericos")        
-
+"""
+E:un numero
+S:el largo del numero
+R:debe ser un numero entero
+O:calcular el largo de un numero entero
+"""
 def largo(num):
-    cont = 0
-    while num>0:
-        cont += 1
-        num = num//10
-    return cont
-
+    if isinstance(num,int):
+        cont = 0
+        while num>0:
+            cont += 1
+            num = num//10
+        return cont
+"""
+E:una lista
+S:la cantidad de elemententos en la lista
+R:debe ser tipo lista
+O:contar la cantidad de elementos en una lista
+"""
 def largoL(lista):
-    cont=0
-    for i in lista:
-        cont +=1
-    return cont    
+    if isinstance(lista,list):
+        cont=0
+        for i in lista:
+            cont +=1
+        return cont    
 
 
 ##########################################################################################################################################
-
+"""
+E:No aplica
+S:la creacion de una ventana
+R:No aplica
+O:crear la ventana que captura la cedula de la empresa a eliminar
+"""
 def VentanaEliminarEmpresas():
     global root
     root.destroy
@@ -248,11 +322,13 @@ def VentanaEliminarEmpresas():
 
 
     root.mainloop
-
-
-
-
-
+    
+"""
+E:Una ruta
+S:el contenido del archivo
+R:No aplica
+O:retorna el contenido de un archivo
+"""
 def retornaContenidoArchivo(rutaEmpresas): #Función que retorna contenido de empresa
     with open(rutaEmpresas, "r") as archivo:
         todoTexto=archivo.read()
@@ -260,7 +336,12 @@ def retornaContenidoArchivo(rutaEmpresas): #Función que retorna contenido de em
     return convierteALista(convertirTextoALista)
 
 
-
+"""
+E:una lista
+S:una lista de listas
+R:No aplica
+O:convertir los elementos de la lista en sublistas por cada vez que se encuentre una "," 
+"""
 def convierteALista(lista):
     if lista == []:
         return []
@@ -270,14 +351,24 @@ def convierteALista(lista):
         return convierteALista(lista[1:])
 
 
-
+"""
+E:Una lista
+S:guardar items
+R:No aplica
+O:Guardar el contenido previo de un archivo
+"""
 def guardarItems(lista):
     with open (rutaEmpresas, "w") as archivo:
         while lista !=[]:
             linea = ",".join(lista[0])+"\n"
             archivo.write(linea)
             lista = lista[1:]
-    
+"""
+E:Una cedula
+S:Le empresa eliminada
+R:Que exista la empresa para poder eliminarla
+O:Eliminar todo el contenido de una empresa guardada en un archivo txt
+"""    
 def eliminarEmpresa(cedula):
     empresas = retornaContenidoArchivo(rutaEmpresas)
     nuevaL = []
@@ -294,6 +385,12 @@ def eliminarEmpresa(cedula):
         tk.messagebox.showerror("Error en la cedula", "La empresa: "+cedula+" no existe")
 
 ##################################################################################################################
+"""
+E:No aplica
+S:creacion de una ventana
+R:No aplica
+O:Creacion de la ventana para la modificacion de las empresas
+"""
 def VentanaModificarEmpresa():
     global root
     root.destroy()
@@ -335,7 +432,12 @@ def VentanaModificarEmpresa():
     
     root.mainloop
     
-
+"""
+E:una cedula, un nombre, direccion y una provincia
+S:La empresa modificada
+R:No aplica
+O:Modificar la informacion de un empresa
+"""
 def modicarEmpresa(cedula, nombreNuevo,direccionNueva,provinciaNueva):
     empresas=retornaContenidoArchivo(rutaEmpresas)
     with open(rutaEmpresas,"w") as archivo:
@@ -355,7 +457,13 @@ def modificarEmpresaAux(empresas,cedula,nombre,direccion,provincia):
 
             
 
-#########################################################################################################################    
+#########################################################################################################################
+"""
+E:No aplica
+S:La creacion de una ventana 
+R:No aplica
+O:Creacion de la ventana en donde iran las empresas guardadas
+"""        
 def crearVentanaMostrarEmpresas():
 
     ventanaMostrar = tk.Toplevel(root)
@@ -372,7 +480,12 @@ def crearVentanaMostrarEmpresas():
     frame.pack()
     
 
-
+"""
+E:un frame y un contador de grid
+S:Las empresas mostradas
+R:No aplica
+O:Mostrar la infromacion de las empresas guardadas en el archivo txt 
+"""
 def mostrarEmpresas(frameParam,contadorGrid):
     archivo= open(rutaEmpresas, "r")
     contenido = archivo.read()
@@ -391,6 +504,12 @@ def mostrarEmpresas(frameParam,contadorGrid):
 Gestion de transportes
 """
 #######################################################################################################################
+"""
+E:No aplica
+S:Una ventana nueva
+R:No aplica
+O:Mostrar al usuario las diferentes opciones para la gestion de transportes
+"""
 def gestionTransportes():
     global root
     root.destroy()
@@ -413,7 +532,13 @@ def gestionTransportes():
                          bg="peachpuff",fg="black", command=crearVentanaMostrarTransporte).place(x=250,y=290))
     botonGT5= (tk.Button(root, text="Volver", width=28, font=("Arial",12),
                          bg="peachpuff",fg="black", command=opcionesAdmin).place(x=250,y=350))
-
+    
+"""
+E:No aplica
+S:creacion de una ventana para registrar transportes
+R:No aplica
+O:Mostrar al usuario la indormacion de lo que tiene que guardar de cada empresa
+"""
 def VentanaAgregarTransporte():
     global root
     root.destroy()
@@ -471,7 +596,12 @@ def VentanaAgregarTransporte():
     
     root.mainloop
 ##################################################################################################################################
-
+"""
+E:una placa,marca,modelo,año,cantidad de asientos economivos. normales y vip
+S:La informacion de entrada almaenada en un archivo txt
+R:No deben existir espacios vacios y no se registran placas existentes
+O:Volver al menú principal
+"""
 def agregarTransporte(placa, marca,modelo,anno,cantEco,cantNor,cantVip):
     try:
         contenido = retornaContenidoArchivo(rutaTransportes)
@@ -503,7 +633,12 @@ def agregarTransporte(placa, marca,modelo,anno,cantEco,cantNor,cantVip):
         tk.messagebox.showerror("Error en los datos", "Ingrese los datos de forma correcta")
         
             
-
+"""
+E:No aplica
+S:Creacion de una ventana
+R:No aplica
+O:crear una ventana para ingresar los datos del transporte que se deseaa eliminar
+"""
 def VentanaEliminarTransporte():
     global root
     root.destroy
@@ -531,14 +666,27 @@ def VentanaEliminarTransporte():
 
 
     root.mainloop
-
+    
+"""
+E:una lista
+S:los items guardados en el archivo txt de la direccion ruta transportes
+R:No aplica
+O:guardar los items que no se eliminaron del archivo
+"""
 def guardarItems(lista):
     with open (rutaTransportes, "w") as archivo:
         while lista !=[]:
             linea = ",".join(lista[0])+"\n"
             archivo.write(linea)
             lista = lista[1:]
-    
+
+            
+"""
+E:Una placa
+S:Borrar un transporte
+R:No aplica
+O:Eliminar de un archivo txt la informacion de un transporte
+"""    
 def eliminarTransporte(placa):
     transportes = retornaContenidoArchivo(rutaTransportes)
     nuevaLT = []
@@ -554,6 +702,12 @@ def eliminarTransporte(placa):
     else:
         tk.messagebox.showerror("Error en la placa", "El transporte: "+placa+" no existe")    
 ###################################################################
+"""
+E:No aplica
+S:Una ventana 
+R:No aplica
+O:La creacion de una ventana para ingresar los datos para la modificacion de una empresa
+"""    
 def VentanamodificarTransporte():
     global root
     root.destroy()
@@ -610,13 +764,18 @@ def VentanamodificarTransporte():
 
     
     root.mainloop
-
+"""
+E:Placa, marca,año,cantidad de asientos economicos, normales y vip
+S:Transporte modificado
+R:No aplica
+O:Modificar un transporte del archivo txt
+"""
 def modificarTransporte(placa, marcaNueva,modeloNuevo,annoNuevo,cantEcoNuevo,cantNorNuevo,cantVipNuevo):
     transportes=retornaContenidoArchivo(rutaTransportes)
     with open(rutaTransportes,"w") as archivo:
         archivo.write
     modificarTransporteAux(transportes,placa,marcaNueva,modeloNuevo,annoNuevo,cantEcoNuevo,cantNorNuevo,cantVipNuevo)
-        
+
 def modificarTransporteAux(transportes,placa,marca,modelo,anno,cantEco,cantNor,cantVip):
     if transportes != []:
         if largoL(trnasportes[0]) == 7:
@@ -631,7 +790,12 @@ def modificarTransporteAux(transportes,placa,marca,modelo,anno,cantEco,cantNor,c
             guardarTransporteMOD(transporte[0], transporte[1], transporte[2],transporte[3],transporte[4],transporte[5],transporte[6])
         modificarEmpresaAux(transportes[1:],placa,marca,modelo,anno,cantEco,cantNor,cantVip)
        
-                
+"""
+E:placa, marca,modelo,año,cantidad de asientos economicos,normales y vip
+S:Escritura en archivo txt
+R:No deben de haber espacios vacios
+O:Guarde la información de un trsansporte modificado
+"""                
 def guardarTransporteMOD(placa,marca,modelo,anno,cantEco,cantNor,cantVip):
     try:
         if placa !="" and marca != "" and modelo != "" and anno != "" and cantEco !="" and cantNor != "" and cantVip !="":
@@ -660,6 +824,12 @@ def guardarTransporteMOD(placa,marca,modelo,anno,cantEco,cantNor,cantVip):
 
     
 ###################################################################
+"""
+E:No aplica
+S:creacion de una  ventana
+R:No aplica
+O:VCrear una ventana para mostrar las empresas
+"""
 def crearVentanaMostrarTransporte():
 
     ventanaMostrarT = tk.Toplevel(root)
@@ -674,7 +844,12 @@ def crearVentanaMostrarTransporte():
     mostrarTransportes(frame, 5)
 
     frame.pack()
-
+"""
+E:un frame y un contador de grid
+S:Las empresas mostradas
+R:No aplica
+O:Mostrar los trnasportes creadas que estan en un archivo txt de transportes
+"""
 def mostrarTransportes(frameParam,contadorGrid):
     archivo= open(rutaTransportes, "r")
     contenido = archivo.read()
@@ -690,7 +865,12 @@ def mostrarTransportes(frameParam,contadorGrid):
             labelMensajeTemp.grid(row=contadorGrid, column=0)
             contadorGrid += 1
 ######################################################################################################################################
-
+"""
+E:No aplica
+S:Creacion de una ventana
+R:No aplica
+O:crear una ventana para la gestion del viaje
+"""
 def gestionViaje():
     global root
     root.destroy()
@@ -708,7 +888,12 @@ def gestionViaje():
     botonGE3= tk.Button(root, text="Modificar viaje",width=28, font=("Arial",12), bg="peachpuff",fg="black", command=VentanamodificarViaje).place(x=250,y=230)
     botonGE4= tk.Button(root, text="Mostrar viaje", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=crearVentanaMostrarViajes).place(x=250,y=290)
     botonGE5= tk.Button(root, text="Volver", width=28, font=("Arial",12), bg="peachpuff",fg="black", command=opcionesAdmin).place(x=250,y=350)
-    
+"""
+E:No aplica
+S:una ventana 
+R:No aplica
+O:Creacion de una ventana que recibe e indica al usuario lo necesario para registrar un viaje
+"""    
 def VentanaAgregarViaje():
     global root
     root.destroy()
@@ -764,11 +949,13 @@ def VentanaAgregarViaje():
                              
     botonVolver =  tk.Button(root, text="Volver", font=("Arial",12), bg="peachpuff",fg="black", command=gestionViaje).place(x=500,y=320)
 #########################################################################
-def numeroViaje():
-    numeroViaje= random.randint(1,9999)
-    print(numeroViaje)
 
-
+"""
+E:un pais y fecha de salida, un pais y fecha de llegada,una empresa y el monto de los asintos.
+S:archhivo txt con informacion 
+R:No aplica
+O:guardar la informacion del viaje en un archivo txt
+"""
 def guardarViaje(PaisSal,fechaSal,PaisLLe,fechaLLe,empresaYtransporte,MontEco,MontNor,MontVip):
     try:
         if PaisSal !="" and fechaSal != "" and PaisLLe != "" and fechaLLe != "" and empresaYtransporte !="" and MontEco != "" and MontNor !="" and MontVip !="":
@@ -802,7 +989,12 @@ def guardarViaje(PaisSal,fechaSal,PaisLLe,fechaLLe,empresaYtransporte,MontEco,Mo
         tk.messagebox.showerror("Error en los datos", "Ingrese los datos de forma correcta")
 
 
-    
+"""
+E:No aplica
+S:creacion de una ventana
+R:No aplica
+O:crear una ventana para eliminar un viaje
+"""    
 def VentanaEliminarViaje():
     global root
     root.destroy
@@ -830,14 +1022,25 @@ def VentanaEliminarViaje():
 
 
     root.mainloop
-
+    
+"""
+E:una lista
+S:modificacion del archivo viajes
+R:No aplica
+O:guardar los items que no se eliminaron del archivo viajes txt
+"""
 def guardarItems(lista):
     with open (rutaViajes, "w") as archivo:
         while lista !=[]:
             linea = ",".join(lista[0])+"\n"
             archivo.write(linea)
             lista = lista[1:]
-    
+"""
+E:un viaje
+S: la informacion de un viaje eliminado
+R:No aplica
+O:eliminar la informacion de un viaje
+"""    
 def eliminarViaje(viaje):
     viajes = retornaContenidoArchivo(rutaViajes)
     nuevaLV = []
@@ -858,7 +1061,12 @@ def eliminarViaje(viaje):
 
 def VentanamodificarViaje():
     pass
-
+"""
+E:No aplica
+S:Una ventana
+R:No aplica
+O:creacion de una ventana para mostrar los viajes
+"""
 def crearVentanaMostrarViajes():
 
     ventanaMostrarV = tk.Toplevel(root)
@@ -870,10 +1078,16 @@ def crearVentanaMostrarViajes():
     labelMensajeLista = tk.Label(frame,text="Lista de viajes",font=("arial",20), bg="peachpuff")
     labelMensajeLista.grid(row=1, column=0)
 
-    mostrarViajes(frame, 8)
+    mostrarViajes(frame, 5)
 
     frame.pack()
-
+    
+"""
+E:un frame y un contador de grid
+S:No aplica 
+R:No aplica
+O:mostrar y acomodar las empresas en el frame enviado
+"""
 def mostrarViajes(frameParam,contadorGrid):
     archivo= open(rutaViajes, "r")
     contenido = archivo.read()
@@ -897,7 +1111,12 @@ def historialReservaciones():
 
 def estadisticas():
     pass
-
+"""
+E:No aplica
+S:Creacion de una ventana
+R:No aplica
+O:Creacion de una ventana para las opciones de usuario
+"""
 def opcionesUsuario():
     global root
     root.destroy()
@@ -927,7 +1146,12 @@ def ventanaGestionviaje():
     
 
 
-
+"""
+E:No aplica
+S:salida del sistema
+R:No aplica
+O:uso de la libreria sys para salir del programa creado
+"""
 def Salir():
     global root
     root.destroy()
